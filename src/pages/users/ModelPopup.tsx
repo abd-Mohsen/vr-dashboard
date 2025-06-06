@@ -1,0 +1,54 @@
+import { useState } from 'react'
+import { ModelViewer } from './ModelViewer'
+import './ModelPopup.scss'
+
+export function ModelPopup({ 
+  model, 
+  onClose 
+}: { 
+  model: {
+    name: string
+    description: string
+    lastUpdated: string
+    thumbnail: string
+    modelPath: string
+  }
+  onClose: () => void 
+}) {
+  return (
+    <div className="popup-overlay">
+      <div className="model-popup">
+        <button className="close-button" onClick={onClose}>×</button>
+        
+        <div className="popup-content">
+          <div className="model-viewer-container">
+            <ModelViewer modelPath={model.modelPath} />
+          </div>
+          
+          <div className="model-info">
+            <h2>{model.name}</h2>
+            <br />
+            <div className="info-section">
+              <h3>Description</h3>
+              <p>{model.description}</p>
+            </div>
+            <div className="info-section">
+              <h3>Last Updated</h3>
+              <p>{new Date(model.lastUpdated).toLocaleDateString()}</p>
+            </div>
+            <div className="info-section">
+              <h3>Model Type</h3>
+              <p>{model.modelPath.split('.').pop()?.toUpperCase()}</p>
+            </div>
+            <button 
+              className="download-button"
+              onClick={() => window.open(model.modelPath, '_blank')}
+            >
+              Download Model
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}

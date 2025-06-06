@@ -1,89 +1,148 @@
+import { AddModelPopup } from "./AddModelPopup";
+import { ModelPopup } from "./ModelPopup";
 import "./Users.scss";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-// Sample data - replace with your actual model data
-const sampleModels = [
-  {
-    id: 1,
-    name: "VR Headset",
-    thumbnail: "/path/to/thumbnail1.jpg", // Replace with actual paths
-    modelPath: "/path/to/model1.glb",
-    description: "High-quality VR headset model",
-    lastUpdated: "2023-05-15"
-  },
-  {
-    id: 2,
-    name: "Game Controller",
-    thumbnail: "/path/to/thumbnail2.jpg",
-    modelPath: "/path/to/model2.glb",
-    description: "Next-gen game controller",
-    lastUpdated: "2023-06-20"
-  },
-  {
-    id: 3,
-    name: "Smart Watch",
-    thumbnail: "/path/to/thumbnail3.jpg",
-    modelPath: "/path/to/model3.glb",
-    description: "Modern smartwatch design",
-    lastUpdated: "2023-04-10"
-  },
-];
+interface Model {
+  id: string;
+  name: string;
+  thumbnail: string;
+  modelPath: string;
+  description: string;
+  lastUpdated: string;
+}
+
+//TODO models take long to load
+//TODO try another model extension
+//TODO auto refresh after adding
+//TODO add adjust lighting and scroll (shift)
+//TODO add crop
+//TODO add edit
+//TODO add delete
+//TODO add id
+//TODO add max lines to desciption in card
 
 const Users = () => {
   const [open, setOpen] = useState(false);
-  const [models, setModels] = useState(sampleModels);
+  const [models, setModels] = useState<Model[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedModel, setSelectedModel] = useState<null | {
+    name: string
+    description: string
+    lastUpdated: string
+    thumbnail: string
+    modelPath: string
+  }>(null)
 
-  // Function to handle viewing a model
-  const handleView = (modelPath : string) => {
-    // Implement your model viewer logic here
-    console.log("Viewing model:", modelPath);
+  const [showAddPopup, setShowAddPopup] = useState(false);
+
+  const handleAddModel = async (formData: FormData) => {
+    try {
+      const response = await fetch('http://localhost:8000/api/models', {
+        method: 'POST',
+        body: formData
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to add model');
+      }
+      
+      // Refresh your models list
+      // fetchModels();
+    } catch (error) {
+      console.error('Error:', error);
+      throw error;
+    }
   };
 
-  // Function to handle downloading a model
-  const handleDownload = (modelPath : string) => {
-    // Implement download logic here
-    console.log("Downloading model:", modelPath);
-  };
+  useEffect(() => {
+    const fetchModels = async () => {
+      try {
+        // Replace with your actual API endpoint
+        const response = await fetch('http://localhost:8000/api/models');
+        if (!response.ok) {
+          throw new Error('Failed to fetch models');
+        }
+        const data = await response.json();
+        setModels(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Unknown error');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchModels();
+  }, []);
+
+
+  if (loading) return <div className="loading">Loading models...</div>;
+  if (error) return <div className="error">Error: {error}</div>;
 
   return (
     <div className="objects">
       <div className="info">
         <h1>3D Objects</h1>
-        <button onClick={() => setOpen(true)}>Add New Object</button>
+        <button onClick={() => setShowAddPopup(true)}>Add New Object</button>
       </div>
 
-      <div className="model-grid">
-        {models.map((model) => (
-          <div key={model.id} className="model-card">
-            <div className="model-preview">
-              {model.thumbnail ? (
-                <img src={model.thumbnail} alt={model.name} />
-              ) : (
-                <div className="placeholder">No Preview Available</div>
-              )}
-            </div>
-            <div className="model-info">
-              <h3>{model.name}</h3>
-              <p>{model.description}</p>
-              <p>Last updated: {model.lastUpdated}</p>
-              <div className="actions">
+      {selectedModel && (
+        <ModelPopup 
+          model={selectedModel}
+          onClose={() => setSelectedModel(null)}
+        />
+      )}
+
+      {showAddPopup && (
+        <AddModelPopup 
+          onClose={() => setShowAddPopup(false)}
+          onAdd={handleAddModel}
+        />
+      )}
+
+
+      {models.length === 0 ? (
+        <div className="no-models">No 3D models found in the models folder.</div>
+      ) : (
+        <div className="model-grid">
+          {models.map((model) => (
+            <div key={model.id} className="model-card">
+              <div className="model-preview">
+                {model.thumbnail ? (
+                  <img src={model.thumbnail} alt={model.name} />
+                ) : (
+                  <div className="placeholder">No Preview Available</div>
+                )}
+              </div>
+              <div className="model-info">
+                <h3 className="title">{model.name}</h3>
+                <h6 className="subtitle">{model.description}</h6>
+                <div className="actions">
                 <button 
                   className="view" 
-                  onClick={() => handleView(model.modelPath)}
+                  onClick={() => setSelectedModel({
+                    name: model.name,
+                    description: model.description,
+                    lastUpdated: model.lastUpdated,
+                    thumbnail: model.thumbnail,
+                    modelPath: model.modelPath
+                  })}
                 >
-                  View
-                </button>
-                <button 
-                  className="download" 
-                  onClick={() => handleDownload(model.modelPath)}
-                >
-                  Download
-                </button>
+                    View
+                  </button>
+                  <button 
+                    className="delete"
+                    // onClick={() => setShowDeleteDialog(true)}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
