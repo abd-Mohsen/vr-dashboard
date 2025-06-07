@@ -26,8 +26,10 @@ interface Object {
 
 const Objects = () => {
   const [objects, setObjects] = useState<Object[]>([]);
+  const [filteredObjects, setFilteredObjects] = useState<Object[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedObject, setSelectedObject] = useState<null | {
     name: string;
     description: string;
@@ -75,15 +77,20 @@ const Objects = () => {
     }
   };
 
-  const fetchModels = async () => {
+  const fetchModels = async (query: string = "") => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:8000/api/models');
+      const url = query 
+        ? `http://localhost:8000/api/models/search?query=${encodeURIComponent(query)}`
+        : 'http://localhost:8000/api/models';
+      
+      const response = await fetch(url);
       if (!response.ok) {
         throw new Error('Failed to fetch models');
       }
       const data = await response.json();
       setObjects(data);
+      setFilteredObjects(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
@@ -91,10 +98,24 @@ const Objects = () => {
     }
   };
 
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    
+    if (query) {
+      const filtered = objects.filter(obj => 
+        obj.name.toLowerCase().includes(query.toLowerCase()) || 
+        obj.description.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredObjects(filtered);
+    } else {
+      setFilteredObjects(objects);
+    }
+  };
+
   useEffect(() => {
     fetchModels();
   }, []);
-
 
   if (loading) return <div className="loading">Loading objects...</div>;
   if (error) return <div className="error">Error: {error}</div>;
@@ -103,7 +124,16 @@ const Objects = () => {
     <div className="objects">
       <div className="info">
         <h1>3D Objects</h1>
-        <button onClick={() => setShowAddPopup(true)}>Add New Object</button>
+        <div className="actions">
+          <input
+            type="text"
+            placeholder="Search objects..."
+            value={searchQuery}
+            onChange={handleSearch}
+            className="search-input"
+          />
+          <button onClick={() => setShowAddPopup(true)}>Add New Object</button>
+        </div>
       </div>
 
       {selectedObject && (
@@ -120,12 +150,13 @@ const Objects = () => {
         />
       )}
 
-
-      {objects.length === 0 ? (
-        <div className="no-objects">No 3D objects found in the objects folder.</div>
+      {filteredObjects.length === 0 ? (
+        <div className="no-objects">
+          {searchQuery ? "No matching objects found" : "No 3D objects found in the objects folder"}
+        </div>
       ) : (
         <div className="object-grid">
-          {objects.map((object) => (
+          {filteredObjects.map((object) => (
             <ObjectCard
               key={object.id}
               object={object}

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import {useRef } from "react";
 import "./ObjectCard.scss";
 
 interface ObjectCardProps {
@@ -45,7 +45,7 @@ export const ObjectCard = ({ object, onView, onDelete }: ObjectCardProps) => {
 
       <div className="actions">
         <button className="view" onClick={onView}>
-            View
+            Edit
         </button>
         <button className="delete" onClick={handleDeleteClick}>
             Delete
