@@ -2,39 +2,30 @@ import { useState, useRef, useEffect } from "react";
 import "./ObjectCard.scss";
 
 interface ObjectCardProps {
-  object: {
-    id: string;
-    name: string;
-    thumbnail: string;
-    description: string;
-    lastUpdated: string;
-    modelPath: string;
-  };
-  onView: () => void;
-  onDelete: () => void;
+    object: {
+      id: string;
+      name: string;
+      thumbnail: string;
+      description: string;
+      lastUpdated: string;
+      modelPath: string;
+    };
+    onView: () => void;
+    onDelete: (id: string) => void; // Changed to accept string parameter
 }
 
 export const ObjectCard = ({ object, onView, onDelete }: ObjectCardProps) => {
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const deleteButtonRef = useRef<HTMLButtonElement>(null);
-  const dialogRef = useRef<HTMLDivElement>(null);
+    const dialogRef = useRef<HTMLDialogElement>(null);
 
-  // Close dialog when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dialogRef.current && !dialogRef.current.contains(event.target as Node)) {
-        setShowDeleteDialog(false);
-      }
+    const handleDeleteClick = (e: React.MouseEvent) => {
+      e.stopPropagation();
+      dialogRef.current?.showModal(); // Use showModal() instead of show()
     };
-
-    if (showDeleteDialog) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+  
+    const confirmDelete = () => {
+      dialogRef.current?.close();
+      onDelete(object.id);
     };
-  }, [showDeleteDialog]);
 
   return (
     <div className="object-card">
@@ -54,49 +45,28 @@ export const ObjectCard = ({ object, onView, onDelete }: ObjectCardProps) => {
 
       <div className="actions">
         <button className="view" onClick={onView}>
-          View
+            View
         </button>
-        <button
-          className="delete"
-          onClick={(e) => {
-            e.stopPropagation();
-            setShowDeleteDialog(true);
-          }}
-          ref={deleteButtonRef}
-        >
-          Delete
+        <button className="delete" onClick={handleDeleteClick}>
+            Delete
         </button>
       </div>
 
-      {showDeleteDialog && (
-        <div className="delete-dialog-overlay">
-          <div 
-            className="delete-dialog"
-            ref={dialogRef}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3>Confirm Deletion</h3>
-            <p>Are you sure you want to delete "{object.name}"?</p>
-            <p>This action cannot be undone.</p>
-            
-            <div className="dialog-actions">
-              <button onClick={() => setShowDeleteDialog(false)}>
-                Cancel
-              </button>
-              <button 
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDelete();
-                  setShowDeleteDialog(false);
-                }}
-                className="delete-button"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
+      
+
+      <dialog ref={dialogRef} className="native-dialog">
+        <h3>Confirm Deletion</h3>
+        <p>Are you sure you want to delete "{object.name}"?</p>
+        <p>This action cannot be undone.</p>
+        <div>
+          <button onClick={() => dialogRef.current?.close()}>Cancel</button>
+          <button onClick={confirmDelete} className="delete-button">
+            Delete
+          </button>
         </div>
-      )}
+      </dialog>
     </div>
+
+    
   );
 };

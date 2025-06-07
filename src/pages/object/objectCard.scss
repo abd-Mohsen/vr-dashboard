@@ -164,3 +164,75 @@
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
   }
+
+  // Add to your existing ObjectCard.scss
+.native-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: none;
+    border-radius: 10px;
+    padding: 25px;
+    width: 400px;
+    max-width: 90%;
+    background: #2d2d2d;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    color: white;
+    z-index: 1001;
+    animation: fadeIn 0.2s ease-out;
+  
+    &::backdrop {
+      background: rgba(0, 0, 0, 0.7);
+    }
+  
+    h3 {
+      margin-top: 0;
+      color: white;
+    }
+  
+    p {
+      margin: 10px 0;
+      color: #ddd;
+    }
+  
+    div {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+  
+      button {
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.2s;
+        border: none;
+  
+        &:first-child {
+          background: #444;
+          color: white;
+  
+          &:hover {
+            background: #555;
+          }
+        }
+  
+        &:last-child {
+          background-color: #ff4444;
+          color: white;
+  
+          &:hover {
+            background-color: #cc0000;
+          }
+        }
+      }
+    }
+  }
+  
+  // Keep your existing animations
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translate(-50%, -55%); }
+    to { opacity: 1; transform: translate(-50%, -50%); }
+  }
