@@ -1,5 +1,17 @@
+//TODO models take long to load
+//TODO try another model extension
+//TODO auto refresh after adding
+//TODO add adjust lighting and scroll (shift)
+//TODO add crop
+//TODO add edit
+//TODO add delete
+//TODO add id
+//TODO add search
+//TODO view by clicking on the card itself, not view button
+
 import { AddObjectPopup } from "./AddObjectPopup";
 import { ObjectDetailsPopup } from "./ObjectDetailsPopup";
+import { ObjectCard } from "./ObjectCard";
 import "./objects.scss";
 import { useState, useEffect } from "react";
 
@@ -12,28 +24,17 @@ interface Object {
   lastUpdated: string;
 }
 
-//TODO models take long to load
-//TODO try another model extension
-//TODO auto refresh after adding
-//TODO add adjust lighting and scroll (shift)
-//TODO add crop
-//TODO add edit
-//TODO add delete
-//TODO add id
-//TODO add max lines to desciption in card
-
 const Objects = () => {
-  const [open, setOpen] = useState(false);
   const [objects, setObjects] = useState<Object[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedObject, setSelectedObject] = useState<null | {
-    name: string
-    description: string
-    lastUpdated: string
-    thumbnail: string
-    modelPath: string
-  }>(null)
+    name: string;
+    description: string;
+    lastUpdated: string;
+    thumbnail: string;
+    modelPath: string;
+  }>(null);
 
   const [showAddPopup, setShowAddPopup] = useState(false);
 
@@ -48,31 +49,49 @@ const Objects = () => {
         throw new Error('Failed to add model');
       }
       
-      // Refresh your models list
-      // fetchModels();
+      // Refresh models after adding
+      fetchModels();
     } catch (error) {
       console.error('Error:', error);
       throw error;
     }
   };
 
-  useEffect(() => {
-    const fetchModels = async () => {
-      try {
-        // Replace with your actual API endpoint
-        const response = await fetch('http://localhost:8000/api/models');
-        if (!response.ok) {
-          throw new Error('Failed to fetch models');
-        }
-        const data = await response.json();
-        setObjects(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unknown error');
-      } finally {
-        setLoading(false);
+  const handleDeleteObject = async (id: string) => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/models/${id}`, {
+        method: 'DELETE'
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to delete model');
       }
-    };
+      
+      // Refresh models after deletion
+      fetchModels();
+    } catch (error) {
+      console.error('Error deleting model:', error);
+      throw error;
+    }
+  };
 
+  const fetchModels = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('http://localhost:8000/api/models');
+      if (!response.ok) {
+        throw new Error('Failed to fetch models');
+      }
+      const data = await response.json();
+      setObjects(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchModels();
   }, []);
 
@@ -107,39 +126,18 @@ const Objects = () => {
       ) : (
         <div className="object-grid">
           {objects.map((object) => (
-            <div key={object.id} className="object-card">
-              <div className="object-preview">
-                {object.thumbnail ? (
-                  <img src={object.thumbnail} alt={object.name} />
-                ) : (
-                  <div className="placeholder">No Preview Available</div>
-                )}
-              </div>
-              <div className="object-info">
-                <h3 className="title">{object.name}</h3>
-                <h6 className="subtitle">{object.description}</h6>
-                <div className="actions">
-                <button 
-                  className="view" 
-                  onClick={() => setSelectedObject({
-                    name: object.name,
-                    description: object.description,
-                    lastUpdated: object.lastUpdated,
-                    thumbnail: object.thumbnail,
-                    modelPath: object.modelPath
-                  })}
-                >
-                    View
-                  </button>
-                  <button 
-                    className="delete"
-                    // onClick={() => setShowDeleteDialog(true)}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-            </div>
+            <ObjectCard
+              key={object.id}
+              object={object}
+              onView={() => setSelectedObject({
+                name: object.name,
+                description: object.description,
+                lastUpdated: object.lastUpdated,
+                thumbnail: object.thumbnail,
+                modelPath: object.modelPath
+              })}
+              onDelete={() => handleDeleteObject(object.id)}
+            />
           ))}
         </div>
       )}
