@@ -28,6 +28,7 @@ export function ModelPopup({
           <div className="model-info">
             <h2>{model.name}</h2>
             <br />
+            <br />
             <div className="info-section">
               <h3>Description</h3>
               <p>{model.description}</p>

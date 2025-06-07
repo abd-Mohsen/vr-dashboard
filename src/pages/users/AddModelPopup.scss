@@ -12,7 +12,7 @@
   }
   
   .add-model-popup {
-    background: white;
+    background: #0F0F0F;
     width: 600px;
     max-width: 90%;
     max-height: 90vh;
@@ -22,20 +22,21 @@
     overflow-y: auto;
   
     .close-button {
-      position: absolute;
-      right: 20px;
-      top: 20px;
-      background: none;
-      border: none;
-      font-size: 24px;
-      cursor: pointer;
-      z-index: 1001;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        background: none;
+        border: none;
+        font-size: 30px;
+        cursor: pointer;
+        z-index: 1001;
+        color: #F00;
     }
   
     h2 {
       margin-top: 0;
       margin-bottom: 20px;
-      color: #333;
+      color: white;
     }
   
     form {
@@ -51,7 +52,7 @@
   
       label {
         font-weight: 500;
-        color: #444;
+        color: #eee;
       }
   
       input, textarea {
@@ -152,7 +153,7 @@
         }
   
         &:disabled {
-          background-color: #cccccc;
+          background-color: #aaa;
           cursor: not-allowed;
         }
       }

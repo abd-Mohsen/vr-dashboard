@@ -13,7 +13,7 @@ export const menu = [
         id: 1,
         title: "Objects",
         url: "/users/",
-        icon: "product.svg",
+        icon: "sofa.svg",
       },
     ],
   },
