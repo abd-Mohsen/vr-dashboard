@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { ModelViewer } from './ModelViewer'
-import './ModelPopup.scss'
+import './ObjectDetailsPopup.scss'
 
-export function ModelPopup({ 
-  model, 
+export function ObjectDetailsPopup({ 
+  object: model, 
   onClose 
 }: { 
-  model: {
+  object: {
     name: string
     description: string
     lastUpdated: string
@@ -45,7 +45,7 @@ export function ModelPopup({
               className="download-button"
               onClick={() => window.open(model.modelPath, '_blank')}
             >
-              Download Model
+              Download 3D Model
             </button>
           </div>
         </div>

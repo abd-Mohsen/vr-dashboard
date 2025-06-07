@@ -1,7 +1,7 @@
 import { useState, useRef, type ChangeEvent } from 'react';
-import './AddModelPopup.scss';
+import './addObjectPopup.scss';
 
-interface ModelFormData {
+interface ObjectFormData {
   name: string;
   description: string;
   thumbnail: File | null;
@@ -9,11 +9,11 @@ interface ModelFormData {
   thumbnailPreview: string;
 }
 
-export function AddModelPopup({ onClose, onAdd }: { 
+export function AddObjectPopup({ onClose, onAdd }: { 
   onClose: () => void;
   onAdd: (formData: FormData) => Promise<void>;
 }) {
-  const [formData, setFormData] = useState<ModelFormData>({
+  const [formData, setFormData] = useState<ObjectFormData>({
     name: '',
     description: '',
     thumbnail: null,
@@ -79,7 +79,7 @@ export function AddModelPopup({ onClose, onAdd }: {
         
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Model Name</label>
+            <label>Object Name</label>
             <input
               type="text"
               name="name"

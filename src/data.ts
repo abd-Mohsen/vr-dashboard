@@ -1,7 +1,7 @@
 export const menu = [
   {
     id: 1,
-    title: "main",
+    title: "scene",
     listItems: [
       // {
       //   id: 1,
@@ -12,7 +12,7 @@ export const menu = [
       {
         id: 1,
         title: "Objects",
-        url: "/users/",
+        url: "/objects/",
         icon: "sofa.svg",
       },
     ],

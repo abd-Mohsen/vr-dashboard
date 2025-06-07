@@ -1,6 +1,6 @@
 import Home from "./pages/home/Home";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
-import Users from "./pages/users/Users";
+import Objects from "./pages/object/Objects";
 import Products from "./pages/products/Products";
 import Navbar from "./components/navbar/Navbar";
 import Footer from "./components/footer/Footer";
@@ -40,20 +40,8 @@ function App() {
           element: <Home />,
         },
         {
-          path: "/users",
-          element: <Users />,
-        },
-        {
-          path: "/products",
-          element: <Products />,
-        },
-        {
-          path: "/users/:id",
-          element: <User />,
-        },
-        {
-          path: "/products/:id",
-          element: <Product />,
+          path: "/objects",
+          element: <Objects />,
         },
       ],
     },

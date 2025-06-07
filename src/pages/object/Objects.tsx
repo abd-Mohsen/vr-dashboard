@@ -1,9 +1,9 @@
-import { AddModelPopup } from "./AddModelPopup";
-import { ModelPopup } from "./ModelPopup";
-import "./Users.scss";
+import { AddObjectPopup } from "./AddObjectPopup";
+import { ObjectDetailsPopup } from "./ObjectDetailsPopup";
+import "./objects.scss";
 import { useState, useEffect } from "react";
 
-interface Model {
+interface Object {
   id: string;
   name: string;
   thumbnail: string;
@@ -22,12 +22,12 @@ interface Model {
 //TODO add id
 //TODO add max lines to desciption in card
 
-const Users = () => {
+const Objects = () => {
   const [open, setOpen] = useState(false);
-  const [models, setModels] = useState<Model[]>([]);
+  const [objects, setObjects] = useState<Object[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedModel, setSelectedModel] = useState<null | {
+  const [selectedObject, setSelectedObject] = useState<null | {
     name: string
     description: string
     lastUpdated: string
@@ -37,7 +37,7 @@ const Users = () => {
 
   const [showAddPopup, setShowAddPopup] = useState(false);
 
-  const handleAddModel = async (formData: FormData) => {
+  const handleAddObject = async (formData: FormData) => {
     try {
       const response = await fetch('http://localhost:8000/api/models', {
         method: 'POST',
@@ -65,7 +65,7 @@ const Users = () => {
           throw new Error('Failed to fetch models');
         }
         const data = await response.json();
-        setModels(data);
+        setObjects(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error');
       } finally {
@@ -77,7 +77,7 @@ const Users = () => {
   }, []);
 
 
-  if (loading) return <div className="loading">Loading models...</div>;
+  if (loading) return <div className="loading">Loading objects...</div>;
   if (error) return <div className="error">Error: {error}</div>;
 
   return (
@@ -87,46 +87,46 @@ const Users = () => {
         <button onClick={() => setShowAddPopup(true)}>Add New Object</button>
       </div>
 
-      {selectedModel && (
-        <ModelPopup 
-          model={selectedModel}
-          onClose={() => setSelectedModel(null)}
+      {selectedObject && (
+        <ObjectDetailsPopup 
+          object={selectedObject}
+          onClose={() => setSelectedObject(null)}
         />
       )}
 
       {showAddPopup && (
-        <AddModelPopup 
+        <AddObjectPopup 
           onClose={() => setShowAddPopup(false)}
-          onAdd={handleAddModel}
+          onAdd={handleAddObject}
         />
       )}
 
 
-      {models.length === 0 ? (
-        <div className="no-models">No 3D models found in the models folder.</div>
+      {objects.length === 0 ? (
+        <div className="no-objects">No 3D objects found in the objects folder.</div>
       ) : (
-        <div className="model-grid">
-          {models.map((model) => (
-            <div key={model.id} className="model-card">
-              <div className="model-preview">
-                {model.thumbnail ? (
-                  <img src={model.thumbnail} alt={model.name} />
+        <div className="object-grid">
+          {objects.map((object) => (
+            <div key={object.id} className="object-card">
+              <div className="object-preview">
+                {object.thumbnail ? (
+                  <img src={object.thumbnail} alt={object.name} />
                 ) : (
                   <div className="placeholder">No Preview Available</div>
                 )}
               </div>
-              <div className="model-info">
-                <h3 className="title">{model.name}</h3>
-                <h6 className="subtitle">{model.description}</h6>
+              <div className="object-info">
+                <h3 className="title">{object.name}</h3>
+                <h6 className="subtitle">{object.description}</h6>
                 <div className="actions">
                 <button 
                   className="view" 
-                  onClick={() => setSelectedModel({
-                    name: model.name,
-                    description: model.description,
-                    lastUpdated: model.lastUpdated,
-                    thumbnail: model.thumbnail,
-                    modelPath: model.modelPath
+                  onClick={() => setSelectedObject({
+                    name: object.name,
+                    description: object.description,
+                    lastUpdated: object.lastUpdated,
+                    thumbnail: object.thumbnail,
+                    modelPath: object.modelPath
                   })}
                 >
                     View
@@ -147,4 +147,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default Objects;
