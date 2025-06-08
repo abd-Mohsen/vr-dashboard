@@ -1,19 +1,15 @@
 //TODO models take long to load
 //TODO try another model extension
-//TODO auto refresh after adding
 //TODO add adjust lighting and scroll (shift)
 //TODO add crop
 //TODO add edit
-//TODO add delete
-//TODO add id
-//TODO add search
-//TODO view by clicking on the card itself, not view button
 
 import { AddObjectPopup } from "./AddObjectPopup";
 import { ObjectDetailsPopup } from "./ObjectDetailsPopup";
 import { ObjectCard } from "./ObjectCard";
 import "./objects.scss";
 import { useState, useEffect } from "react";
+import LoadingIndicator from "../../components/loadingIndicator/LoadingIndicator";
 
 interface Object {
   id: string;
@@ -39,19 +35,26 @@ const Objects = () => {
   }>(null);
 
   const [showAddPopup, setShowAddPopup] = useState(false);
+  const [editObject, setEditObject] = useState<Object | null>(null);
 
-  const handleAddObject = async (formData: FormData) => {
+  const handleAddObject = async (formData: FormData, modelId?: string) => {
     try {
-      const response = await fetch('http://localhost:8000/api/models', {
-        method: 'POST',
+      const url = modelId 
+        ? `http://localhost:8000/api/models/${modelId}`
+        : 'http://localhost:8000/api/models';
+      
+      const method = modelId ? 'PUT' : 'POST';
+      
+      const response = await fetch(url, {
+        method,
         body: formData
       });
       
       if (!response.ok) {
-        throw new Error('Failed to add model');
+        throw new Error('Failed to save model');
       }
       
-      // Refresh models after adding
+      // Refresh models after adding/updating
       fetchModels();
     } catch (error) {
       console.error('Error:', error);
@@ -82,7 +85,7 @@ const Objects = () => {
       setLoading(true);
       const url = query 
         ? `http://localhost:8000/api/models/search?query=${encodeURIComponent(query)}`
-        : 'http://localhost:8000/api/models';
+        : 'http://localhost:8000/api/models/search';
       
       const response = await fetch(url);
       if (!response.ok) {
@@ -117,7 +120,7 @@ const Objects = () => {
     fetchModels();
   }, []);
 
-  if (loading) return <div className="loading">Loading objects...</div>;
+  if (loading) return <LoadingIndicator/>;
   if (error) return <div className="error">Error: {error}</div>;
 
   return (
@@ -145,8 +148,12 @@ const Objects = () => {
 
       {showAddPopup && (
         <AddObjectPopup 
-          onClose={() => setShowAddPopup(false)}
+          onClose={() => {
+            setShowAddPopup(false)
+            setEditObject(null)
+          }}
           onAdd={handleAddObject}
+          model={editObject}
         />
       )}
 
@@ -168,6 +175,10 @@ const Objects = () => {
                 modelPath: object.modelPath
               })}
               onDelete={() => handleDeleteObject(object.id)}
+              onEdit={()=>{
+                setEditObject(object);
+                setShowAddPopup(true);
+              }}
             />
           ))}
         </div>

@@ -11,10 +11,11 @@ interface ObjectCardProps {
       modelPath: string;
     };
     onView: () => void;
+    onEdit: () => void;
     onDelete: (id: string) => void; // Changed to accept string parameter
 }
 
-export const ObjectCard = ({ object, onView, onDelete }: ObjectCardProps) => {
+export const ObjectCard = ({ object, onView, onEdit, onDelete }: ObjectCardProps) => {
     const dialogRef = useRef<HTMLDialogElement>(null);
 
     const handleDeleteClick = (e: React.MouseEvent) => {
@@ -44,7 +45,7 @@ export const ObjectCard = ({ object, onView, onDelete }: ObjectCardProps) => {
       </div>
 
       <div className="actions">
-        <button className="view" onClick={onView}>
+        <button className="view" onClick={onEdit}>
             Edit
         </button>
         <button className="delete" onClick={handleDeleteClick}>

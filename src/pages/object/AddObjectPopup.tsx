@@ -1,4 +1,4 @@
-import { useState, useRef, type ChangeEvent } from 'react';
+import { useState, useRef, type ChangeEvent, useEffect } from 'react';
 import './addObjectPopup.scss';
 
 interface ObjectFormData {
@@ -9,9 +9,18 @@ interface ObjectFormData {
   thumbnailPreview: string;
 }
 
-export function AddObjectPopup({ onClose, onAdd }: { 
+interface Model {
+  id: string;
+  name: string;
+  description: string;
+  thumbnail: string;
+  modelPath: string;
+}
+
+export function AddObjectPopup({ onClose, onAdd, model }: { 
   onClose: () => void;
-  onAdd: (formData: FormData) => Promise<void>;
+  onAdd: (formData: FormData, modelId?: string) => Promise<void>;
+  model?: Model | null;
 }) {
   const [formData, setFormData] = useState<ObjectFormData>({
     name: '',
@@ -23,6 +32,19 @@ export function AddObjectPopup({ onClose, onAdd }: {
   const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const modelInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    console.log(model);
+    if (model) {
+      setFormData(prev => ({
+        ...prev,
+        name: model.name,
+        description: model.description,
+        thumbnailPreview: model.thumbnail
+      }));
+      //console.log(formData);
+    }
+  }, [model]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -51,31 +73,39 @@ export function AddObjectPopup({ onClose, onAdd }: {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.modelFile) return;
+    if (!formData.name || (!formData.modelFile && !model)) return;
 
     setIsLoading(true);
     
     const formDataToSend = new FormData();
     formDataToSend.append('name', formData.name);
     formDataToSend.append('description', formData.description);
-    if (formData.thumbnail) formDataToSend.append('thumbnail', formData.thumbnail);
-    formDataToSend.append('model', formData.modelFile);
+    
+    // Always append thumbnail if it exists, even if null (to allow removal)
+    if (formData.thumbnail || (model && !formData.thumbnailPreview)) {
+        formDataToSend.append('thumbnail', formData.thumbnail || new Blob());
+    }
+    
+    // Always append model if it exists
+    if (formData.modelFile) {
+        formDataToSend.append('model', formData.modelFile);
+  }
 
     try {
-      await onAdd(formDataToSend);
+      await onAdd(formDataToSend, model?.id);
       onClose();
     } catch (error) {
       console.error('Error adding model:', error);
     } finally {
       setIsLoading(false);
     }
-  };
+};
 
   return (
     <div className="popup-overlay">
       <div className="add-model-popup">
         <button className="close-button" onClick={onClose}>×</button>
-        <h2>Add New 3D Model</h2>
+        <h2>{model ? 'Edit 3D Model' : 'Add New 3D Model'}</h2>
         
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -134,7 +164,7 @@ export function AddObjectPopup({ onClose, onAdd }: {
                 onChange={handleModelChange}
                 accept=".glb,.gltf,.fbx,.obj"
                 hidden
-                required
+                required={!model}
               />
               <button 
                 type="button" 
@@ -146,6 +176,9 @@ export function AddObjectPopup({ onClose, onAdd }: {
               {formData.modelFile && (
                 <div className="file-info">{formData.modelFile.name}</div>
               )}
+              {model && !formData.modelFile && (
+                <div className="file-info">Current model will be kept</div>
+              )}
             </div>
           </div>
 
@@ -156,9 +189,9 @@ export function AddObjectPopup({ onClose, onAdd }: {
             <button 
               type="submit" 
               className="submit-button"
-              disabled={isLoading || !formData.name || !formData.modelFile}
+              disabled={isLoading || !formData.name || (!formData.modelFile && !model)}
             >
-              {isLoading ? 'Uploading...' : 'Add Model'}
+              {isLoading ? 'Saving...' : model ? 'Save Changes' : 'Add Model'}
             </button>
           </div>
         </form>
