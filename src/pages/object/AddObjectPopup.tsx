@@ -74,32 +74,33 @@ export function AddObjectPopup({ onClose, onAdd, model }: {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || (!formData.modelFile && !model)) return;
-
+  
     setIsLoading(true);
     
     const formDataToSend = new FormData();
     formDataToSend.append('name', formData.name);
     formDataToSend.append('description', formData.description);
     
-    // Always append thumbnail if it exists, even if null (to allow removal)
-    if (formData.thumbnail || (model && !formData.thumbnailPreview)) {
-        formDataToSend.append('thumbnail', formData.thumbnail || new Blob());
+    // Only append thumbnail if a new one was selected
+    if (formData.thumbnail) {
+      formDataToSend.append('thumbnail', formData.thumbnail);
     }
     
-    // Always append model if it exists
+    // Only append model if a new one was selected
     if (formData.modelFile) {
-        formDataToSend.append('model', formData.modelFile);
-  }
-
+      formDataToSend.append('model', formData.modelFile);
+    }
+  
     try {
       await onAdd(formDataToSend, model?.id);
       onClose();
     } catch (error) {
-      console.error('Error adding model:', error);
+      console.error('Error saving model:', error);
+      // Optionally show error to user
     } finally {
       setIsLoading(false);
     }
-};
+  };
 
   return (
     <div className="popup-overlay">

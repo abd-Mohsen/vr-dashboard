@@ -2,7 +2,6 @@
 //TODO try another model extension
 //TODO add adjust lighting and scroll (shift)
 //TODO add crop
-//TODO add edit
 
 import { AddObjectPopup } from "./AddObjectPopup";
 import { ObjectDetailsPopup } from "./ObjectDetailsPopup";
@@ -47,11 +46,13 @@ const Objects = () => {
       
       const response = await fetch(url, {
         method,
-        body: formData
+        body: formData,
+        cache: 'no-store'
       });
       
       if (!response.ok) {
-        throw new Error('Failed to save model');
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to save model');
       }
       
       // Refresh models after adding/updating
