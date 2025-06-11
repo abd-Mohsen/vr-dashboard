@@ -2,6 +2,10 @@
 //TODO try another model extension
 //TODO add adjust lighting and scroll (shift)
 //TODO add crop
+//TODO add show/hide object
+//TODO icons not reloading on refresh
+//TODO model type is stored wrong "GLB?T=1749555185"
+//TODO some times last object doesnt load its last state
 
 import { AddObjectPopup } from "./AddObjectPopup";
 import { ObjectDetailsPopup } from "./ObjectDetailsPopup";
@@ -93,6 +97,7 @@ const Objects = () => {
         throw new Error('Failed to fetch models');
       }
       const data = await response.json();
+      console.log(data)
       setObjects(data);
       setFilteredObjects(data);
     } catch (err) {
