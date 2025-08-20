@@ -1,3 +1,5 @@
+import sofaIcon from './assets/sofa.svg';
+
 export const menu = [
   {
     id: 1,
@@ -13,7 +15,7 @@ export const menu = [
         id: 1,
         title: "Objects",
         url: "/objects/",
-        icon: "sofa.svg",
+        icon: sofaIcon,
       },
     ],
   },

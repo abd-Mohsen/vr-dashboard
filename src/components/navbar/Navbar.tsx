@@ -1,4 +1,5 @@
 import OptionsMenu from "../OptionsMenu";
+import logoIcon from "../../assets/vr-glasses.svg";
 import "./navbar.scss";
 
 const Navbar = () => {
@@ -6,7 +7,7 @@ const Navbar = () => {
     <div className="navbar">
       <div className="logo">
         <img 
-          src="vr-glasses.svg" 
+          src={logoIcon}
           alt="VR glasses icon" 
           style={{ width: '40px', height: '40px' }} 
         />

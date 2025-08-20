@@ -3,7 +3,6 @@
 //TODO add adjust lighting and scroll (shift)
 //TODO add crop
 //TODO add show/hide object
-//TODO icons not reloading on refresh
 //TODO some times last object doesnt load its last state
 //TODO CHANGE FLOOR AND ADD A TEMPLATE FOR PICS (COMPANY LOGO)
 //TODO LOGIN (via auro generated code)
