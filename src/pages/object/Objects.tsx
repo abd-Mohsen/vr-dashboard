@@ -1,13 +1,13 @@
-//TODO models take long to load
 //TODO try another model extension
 //TODO add adjust lighting and scroll (shift)
-//TODO add crop
-//TODO add show/hide object
 //TODO some times last object doesnt load its last state
 //TODO CHANGE FLOOR AND ADD A TEMPLATE FOR PICS (COMPANY LOGO)
-//TODO LOGIN (via auro generated code)
+//TODO LOGIN (via auto generated code)
 //TODO REPORTS (VIEW COUNT ANS STATISTICS)
+//TODO show objects tab immeaditly
 
+//! models take long to load
+//! TODO add crop
 // ADD CATEGORIES, PRICE AND THUMBNAIL FOR 3D MODEL AND FILTER
 // SURVEY
 // RECOMMEND SIMILLAR PRODUCTS
