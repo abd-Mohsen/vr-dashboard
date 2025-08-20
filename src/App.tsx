@@ -1,5 +1,5 @@
 import Home from "./pages/home/Home";
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet, Navigate } from "react-router-dom";
 import Objects from "./pages/object/Objects";
 import Products from "./pages/products/Products";
 import Navbar from "./components/navbar/Navbar";
@@ -37,7 +37,7 @@ function App() {
       children: [
         {
           path: "/",
-          element: <Home />,
+          element: <Navigate to="/objects" replace />,
         },
         {
           path: "/objects",

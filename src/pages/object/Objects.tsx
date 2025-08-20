@@ -1,6 +1,8 @@
 //TODO try another model extension
 //TODO add adjust lighting and scroll (shift)
 //TODO some times last object doesnt load its last state
+//TODO some times object doesnt get hid (if it was the last remaining)
+//TODO when refreshing in unity models are poping up
 //TODO CHANGE FLOOR AND ADD A TEMPLATE FOR PICS (COMPANY LOGO)
 //TODO LOGIN (via auto generated code)
 //TODO REPORTS (VIEW COUNT ANS STATISTICS)
