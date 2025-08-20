@@ -4,13 +4,12 @@
 //TODO add crop
 //TODO add show/hide object
 //TODO icons not reloading on refresh
-//TODO model type is stored wrong "GLB?T=1749555185"
 //TODO some times last object doesnt load its last state
-//TODO CHANGE FLOOR AND ADD A TEMPLATRE FOR PICS (COMPANY LOGO)
+//TODO CHANGE FLOOR AND ADD A TEMPLATE FOR PICS (COMPANY LOGO)
 //TODO LOGIN (via auro generated code)
 //TODO REPORTS (VIEW COUNT ANS STATISTICS)
 
-//ADD CATEGORIES, PRICE AND THUMBNAIL FOR 3D MODEL AND FILTER
+// ADD CATEGORIES, PRICE AND THUMBNAIL FOR 3D MODEL AND FILTER
 // SURVEY
 // RECOMMEND SIMILLAR PRODUCTS
 // like button

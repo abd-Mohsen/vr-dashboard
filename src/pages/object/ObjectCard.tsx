@@ -40,7 +40,7 @@ export const ObjectCard = ({ object, onView, onEdit, onDelete }: ObjectCardProps
         </div>
         <div className="object-info">
           <h3 className="title">{object.name}</h3>
-          <h6 className="subtitle">{object.description}</h6>
+          <h6 className="subtitle"  style={{ whiteSpace: 'pre-line' }}>{object.description}</h6>
         </div>
       </div>
 

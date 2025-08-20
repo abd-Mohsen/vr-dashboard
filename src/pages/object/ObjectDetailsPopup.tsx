@@ -31,7 +31,7 @@ export function ObjectDetailsPopup({
             <br />
             <div className="info-section">
               <h3>Description</h3>
-              <p>{model.description}</p>
+              <p style={{ whiteSpace: 'pre-line' }}>{model.description}</p>
             </div>
             <div className="info-section">
               <h3>Last Updated</h3>
@@ -39,7 +39,7 @@ export function ObjectDetailsPopup({
             </div>
             <div className="info-section">
               <h3>Model Type</h3>
-              <p>{model.modelPath.split('.').pop()?.toUpperCase()}</p>
+              <p>{model.modelPath.split('?')[0].split('.').pop()?.toUpperCase()}</p>
             </div>
             <button 
               className="download-button"
