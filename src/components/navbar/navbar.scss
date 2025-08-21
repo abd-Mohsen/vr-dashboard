@@ -13,15 +13,37 @@
     font-weight: bold;
     gap: 10px;
   }
+
   .icons {
     display: flex;
     align-items: center;
     gap: 20px;
 
-    .icon{
-      @include sm{
+    .icon {
+      @include sm {
         display: none;
       }
+    }
+
+    // 🔹 New style for the selected layout name
+    .selected-layout-label {
+      background-color: #2d2d2d;
+      color: #4CAF50;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .no-layout-selected {
+      background-color: #2d2d2d;
+      color: #ff4d4d; // 🔹 Red text for warning
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      white-space: nowrap;
     }
 
     .notification {

@@ -67,6 +67,7 @@ const Layouts = () => {
         localStorage.removeItem("selectedLayoutId");
         localStorage.removeItem("selectedLayoutName");
         setSelectedLayoutId(null);
+        window.dispatchEvent(new Event("layoutChanged"));
       }
 
       fetchLayouts();
@@ -80,6 +81,7 @@ const Layouts = () => {
     localStorage.setItem("selectedLayoutId", layout.id);
     localStorage.setItem("selectedLayoutName", layout.name);
     setSelectedLayoutId(layout.id);
+    window.dispatchEvent(new Event("layoutChanged"));
   };
 
   const fetchLayouts = async () => {
