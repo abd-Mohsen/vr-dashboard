@@ -76,14 +76,25 @@
     position: relative;
     border: 1px solid #2d2d2d;
     border-radius: 8px;
-    overflow: visible;
-    transition: transform 0.3s, box-shadow 0.3s;
     background: #1E1E1E;
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
     z-index: 1;
-  
+    cursor: pointer; // 🔹 Makes the whole card clickable
+
     &:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        cursor: pointer; // 🔹 Ensures proper hover feedback
+    }
+
+    &.selected {
+        border-color: #4CAF50;
+        box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+        transform: translateY(-3px);
+
+        h3 {
+        color: #4CAF50;
+        }
     }
   
     .layout-info {

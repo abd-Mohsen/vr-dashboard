@@ -13,15 +13,26 @@ interface LayoutCardProps {
   onDelete: () => void;
   onEdit: () => void;
   onSelect: () => void;
+  isSelected: boolean;
 }
 
-export const LayoutCard = ({ layout, onView, onDelete, onEdit, onSelect: onSelect }: LayoutCardProps) => {
+export const LayoutCard = ({ layout, onDelete, onEdit, onSelect, isSelected }: LayoutCardProps) => {
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString();
   };
 
+  // Prevents triggering selection when clicking Edit/Delete
+  const handleCardClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement;
+    if (target.closest("button")) return; 
+    onSelect();
+  };
+
   return (
-    <div className="layout-card">
+    <div
+      className={`layout-card ${isSelected ? "selected" : ""}`}
+      onClick={handleCardClick}
+    >
       <div className="layout-info">
         <h3>{layout.name}</h3>
         <p className="description">{layout.description || "No description"}</p>
@@ -32,8 +43,6 @@ export const LayoutCard = ({ layout, onView, onDelete, onEdit, onSelect: onSelec
       </div>
       
       <div className="layout-actions">
-        {/* <button onClick={onView} className="btn-view">View Details</button> */}
-        {/* <button onClick={onSetDefault} className="btn-default">Set Default</button> */}
         <button onClick={onEdit} className="btn-edit">Edit</button>
         <button onClick={onDelete} className="btn-delete">Delete</button>
       </div>

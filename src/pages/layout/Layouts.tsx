@@ -21,31 +21,28 @@ const Layouts = () => {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedLayout, setSelectedLayout] = useState<Layout | null>(null);
+  const [selectedLayoutId, setSelectedLayoutId] = useState<string | null>(
+    localStorage.getItem("selectedLayoutId")
+  );
   const [showAddPopup, setShowAddPopup] = useState(false);
   const [editLayout, setEditLayout] = useState<Layout | null>(null);
 
   const handleAddLayout = async (name: string, description: string, layoutId?: string) => {
     try {
-      const url = layoutId 
+      const url = layoutId
         ? `http://localhost:8000/api/scenes/${layoutId}`
         : 'http://localhost:8000/api/scenes';
       
       const method = layoutId ? 'PUT' : 'POST';
-      
       const formData = new FormData();
       formData.append('name', name);
       formData.append('description', description);
       
-      const response = await fetch(url, {
-        method,
-        body: formData,
-      });
-      
+      const response = await fetch(url, { method, body: formData });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.detail || 'Failed to save layout');
       }
-      
       fetchLayouts();
     } catch (error) {
       console.error('Error:', error);
@@ -63,10 +60,15 @@ const Layouts = () => {
         method: 'DELETE'
       });
       
-      if (!response.ok) {
-        throw new Error('Failed to delete layout');
+      if (!response.ok) throw new Error('Failed to delete layout');
+
+      // Clear localStorage if deleted layout is selected
+      if (id === selectedLayoutId) {
+        localStorage.removeItem("selectedLayoutId");
+        localStorage.removeItem("selectedLayoutName");
+        setSelectedLayoutId(null);
       }
-      
+
       fetchLayouts();
     } catch (error) {
       console.error('Error deleting layout:', error);
@@ -74,33 +76,19 @@ const Layouts = () => {
     }
   };
 
-  const handleSetDefaultLayout = async (id: string) => {
-    try {
-      const response = await fetch(`http://localhost:8000/api/scenes/${id}/default`, {
-        method: 'PUT'
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to set default layout');
-      }
-      
-      alert('Default layout set successfully!');
-      fetchLayouts();
-    } catch (error) {
-      console.error('Error setting default layout:', error);
-      throw error;
-    }
+  const handleSelectLayout = (layout: Layout) => {
+    localStorage.setItem("selectedLayoutId", layout.id);
+    localStorage.setItem("selectedLayoutName", layout.name);
+    setSelectedLayoutId(layout.id);
   };
 
   const fetchLayouts = async () => {
     try {
       setLoading(true);
       const response = await fetch('http://localhost:8000/api/scenes');
-      if (!response.ok) {
-        throw new Error('Failed to fetch layouts');
-      }
+      if (!response.ok) throw new Error('Failed to fetch layouts');
       const layoutsData: Layout[] = await response.json();
-      
+
       const layoutsWithCounts = await Promise.all(
         layoutsData.map(async (layout) => {
           try {
@@ -128,23 +116,21 @@ const Layouts = () => {
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
     setSearchQuery(query);
-    
-    if (query) {
-      const filtered = layouts.filter(layout => 
-        layout.name.toLowerCase().includes(query.toLowerCase()) || 
-        layout.description.toLowerCase().includes(query.toLowerCase())
-      );
-      setFilteredLayouts(filtered);
-    } else {
-      setFilteredLayouts(layouts);
-    }
+    setFilteredLayouts(
+      query
+        ? layouts.filter(layout =>
+            layout.name.toLowerCase().includes(query.toLowerCase()) ||
+            layout.description.toLowerCase().includes(query.toLowerCase())
+          )
+        : layouts
+    );
   };
 
   useEffect(() => {
     fetchLayouts();
   }, []);
 
-  if (loading) return <LoadingIndicator/>;
+  if (loading) return <LoadingIndicator />;
   if (error) return <div className="error">Error: {error}</div>;
 
   return (
@@ -164,18 +150,18 @@ const Layouts = () => {
       </div>
 
       {selectedLayout && (
-        <LayoutDetailsPopup 
+        <LayoutDetailsPopup
           layout={selectedLayout}
           onClose={() => setSelectedLayout(null)}
-          onSetDefault={() => handleSetDefaultLayout(selectedLayout.id)}
+          onSetDefault={() => handleSelectLayout(selectedLayout)}
         />
       )}
 
       {showAddPopup && (
-        <AddLayoutPopup 
+        <AddLayoutPopup
           onClose={() => {
-            setShowAddPopup(false)
-            setEditLayout(null)
+            setShowAddPopup(false);
+            setEditLayout(null);
           }}
           onAdd={handleAddLayout}
           layout={editLayout}
@@ -198,7 +184,8 @@ const Layouts = () => {
                 setEditLayout(layout);
                 setShowAddPopup(true);
               }}
-              onSelect={() => handleSetDefaultLayout(layout.id)}
+              onSelect={() => handleSelectLayout(layout)}
+              isSelected={layout.id === selectedLayoutId}
             />
           ))}
         </div>
