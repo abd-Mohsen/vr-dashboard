@@ -20,7 +20,7 @@ export function ObjectDetailsPopup({
       <div className="model-popup">
         <button className="close-button" onClick={onClose}>×</button>
         
-        <div className="popup-content">
+        <div className="object-popup-content">
           <div className="model-viewer-container">
             <ModelViewer modelPath={model.modelPath} />
           </div>
