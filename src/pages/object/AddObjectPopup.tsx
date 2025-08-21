@@ -78,6 +78,7 @@ export function AddObjectPopup({ onClose, onAdd, model }: {
     setIsLoading(true);
     
     const formDataToSend = new FormData();
+    formDataToSend.append('scene_id', localStorage["selectedLayoutId"]);
     formDataToSend.append('name', formData.name);
     formDataToSend.append('description', formData.description);
     

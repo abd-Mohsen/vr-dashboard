@@ -38,12 +38,16 @@ export const ObjectCard = ({ object, onView, onEdit, onDelete, onVisibilityChang
     setIsLoading(true);
     
     try {
+      const formDataToSend = new FormData();
+      formDataToSend.append('scene_id', localStorage["selectedLayoutId"]);
+      formDataToSend.append('hidden', newHiddenState.toString());
+
       const response = await fetch(`http://localhost:8000/api/models/${object.id}/visibility`, {
         method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `hidden=${newHiddenState}`
+        // headers: {
+        //   'Content-Type': 'application/x-www-form-urlencoded',
+        // },
+        body: formDataToSend,
       });
       
       if (response.ok) {

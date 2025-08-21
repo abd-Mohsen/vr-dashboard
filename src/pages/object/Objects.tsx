@@ -5,7 +5,7 @@
 //TODO CHANGE FLOOR AND ADD A TEMPLATE FOR PICS (COMPANY LOGO)
 //TODO LOGIN (via auto generated code)
 //TODO REPORTS (VIEW COUNT ANS STATISTICS)
-//TODO add scene selector
+//TODO handle scene in unity
 
 //! models take long to load
 //! TODO add crop
@@ -78,7 +78,9 @@ const Objects = () => {
 
   const handleDeleteObject = async (id: string) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/models/${id}`, {
+      const sceneId = (localStorage.getItem("selectedLayoutId") || "").trim();
+
+      const response = await fetch(`http://localhost:8000/api/models/${id}?scene_id=${encodeURIComponent(sceneId)}`, {
         method: 'DELETE'
       });
       
@@ -97,9 +99,13 @@ const Objects = () => {
   const fetchModels = async (query: string = "") => {
     try {
       setLoading(true);
-      const url = query 
-        ? `http://localhost:8000/api/models/search?query=${encodeURIComponent(query)}`
-        : 'http://localhost:8000/api/models/search';
+      // const url = query 
+      //   ? `http://localhost:8000/api/models/search?query=${encodeURIComponent(query)}`
+      //   : 'http://localhost:8000/api/models/search';
+      
+      const sceneId = (localStorage.getItem("selectedLayoutId") || "").trim();
+
+      const url = `http://localhost:8000/api/models/search?scene_id=${encodeURIComponent(sceneId)}${query ? `&query=${encodeURIComponent(query)}` : ""}`;
       
       const response = await fetch(url);
       if (!response.ok) {
