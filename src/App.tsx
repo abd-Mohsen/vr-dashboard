@@ -5,6 +5,7 @@ import Footer from "./components/footer/Footer";
 import Menu from "./components/menu/Menu";
 import Login from "./pages/login/Login";
 import "./styles/global.scss";
+import Layouts from "./pages/layout/Layouts";
 
 function App() {
   function Layout(){
@@ -37,6 +38,10 @@ function App() {
         {
           path: "/objects",
           element: <Objects />,
+        },
+        {
+          path: "/layouts",
+          element: <Layouts />,
         },
       ],
     },

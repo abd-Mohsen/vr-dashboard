@@ -1,18 +1,19 @@
 import sofaIcon from './assets/sofa.svg';
+import layoutIcon from './assets/layout.svg';
 
 export const menu = [
   {
     id: 1,
-    title: "scene",
+    title: "layout",
     listItems: [
-      // {
-      //   id: 1,
-      //   title: "scenes",
-      //   url: "/",
-      //   icon: "home.svg",
-      // },
       {
         id: 1,
+        title: "my layouts",
+        url: "/layouts/",
+        icon: layoutIcon,
+      },
+      {
+        id: 2,
         title: "Objects",
         url: "/objects/",
         icon: sofaIcon,
