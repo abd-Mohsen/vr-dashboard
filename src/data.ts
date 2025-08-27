@@ -1,5 +1,6 @@
 import sofaIcon from './assets/sofa.svg';
 import layoutIcon from './assets/layout.svg';
+import generateIcon from './assets/generate_3d_model.svg';
 
 export const menu = [
   {
@@ -18,6 +19,24 @@ export const menu = [
         url: "/objects/",
         icon: sofaIcon,
       },
+    ],
+  },
+  {
+    id: 2,
+    title: "model generation",
+    listItems: [
+      {
+        id: 1,
+        title: "generate",
+        url: "/generate/",
+        icon: generateIcon,
+      },
+      // {
+      //   id: 2,
+      //   title: "tips",
+      //   url: "/generate/",
+      //   icon: sofaIcon,
+      // },
     ],
   },
   // {

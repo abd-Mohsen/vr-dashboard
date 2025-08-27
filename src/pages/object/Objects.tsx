@@ -1,14 +1,16 @@
 //TODO try another model extension
-//TODO some times last object doesnt load its last state
-//TODO some times object doesnt get hid (if it was the last remaining)
-//TODO when refreshing in unity models are poping up
 //TODO CHANGE FLOOR AND ADD A TEMPLATE FOR PICS (COMPANY LOGO)
 //TODO LOGIN (via auto generated code)
 //TODO REPORTS (VIEW COUNT ANS STATISTICS)
-//TODO handle scene in unity
+//TODO darkmode and locale
 
-//! models take long to load
-//! TODO add crop
+//^ UNITY
+//TODO some times last object doesnt load its last state
+//TODO some times object doesnt get hid (if it was the last remaining)
+//TODO when refreshing in unity models are poping up
+
+// models take long to load
+// add crop
 // add adjust lighting and scroll (shift)
 // ADD CATEGORIES, PRICE AND THUMBNAIL FOR 3D MODEL AND FILTER
 // SURVEY

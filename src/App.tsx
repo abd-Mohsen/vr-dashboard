@@ -6,6 +6,7 @@ import Menu from "./components/menu/Menu";
 import Login from "./pages/login/Login";
 import "./styles/global.scss";
 import Layouts from "./pages/layout/Layouts";
+import GeneratePage from "./pages/generate/GeneatePage";
 
 function App() {
   function Layout(){
@@ -42,6 +43,10 @@ function App() {
         {
           path: "/layouts",
           element: <Layouts />,
+        },
+        {
+          path: "/generate",
+          element: <GeneratePage />,
         },
       ],
     },
