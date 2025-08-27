@@ -43,14 +43,13 @@ const ParametersPanel: React.FC<ParametersPanelProps> = ({ params, onChange }) =
       <div className="param">
         <label>model type:</label>
         <select
-          value={params.dropdown1}
+          value={params.dropdown2}
           onChange={(e: ChangeEvent<HTMLSelectElement>) =>
             onChange("dropdown2", e.target.value)
           }
         >
           {/* <option value="">Select...</option> */}
           <option value="obj">OBJ</option>
-          <option value="gltf">GLTF</option>
           <option value="glb">GLB</option>
         </select>
       </div>

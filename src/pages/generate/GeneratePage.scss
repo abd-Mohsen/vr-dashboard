@@ -41,31 +41,60 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-
+  
     h3 {
       margin-bottom: 8px;
       font-size: 18px;
       color: #fff;
     }
-
+  
     .param {
       display: flex;
       flex-direction: column;
       gap: 6px;
-
+  
       label {
         font-size: 14px;
         color: #ccc;
         display: flex;
         align-items: center;
         gap: 8px;
-
+        cursor: pointer;
+  
         input[type="checkbox"] {
-          transform: scale(1.1);
+          appearance: none; // remove default styling
+          width: 18px;
+          height: 18px;
+          border: 2px solid #444;
+          border-radius: 4px;
+          background: #1e1e1e;
           cursor: pointer;
+          position: relative;
+          transition: all 0.2s;
+  
+          &:checked {
+            background: #4caf50;
+            border-color: #4caf50;
+  
+            &::after {
+              content: "";
+              position: absolute;
+              top: 3px;
+              left: 6px;
+              width: 4px;
+              height: 9px;
+              border: solid white;
+              border-width: 0 2px 2px 0;
+              transform: rotate(45deg);
+            }
+          }
+  
+          &:hover {
+            border-color: #646cff;
+          }
         }
       }
-
+  
       input,
       select {
         padding: 8px;
@@ -75,15 +104,30 @@
         border: 1px solid #444;
         font-size: 14px;
         transition: all 0.2s;
-
+  
         &:focus {
           border-color: #646cff;
           box-shadow: 0 0 0 2px rgba(100, 108, 255, 0.3);
           outline: none;
         }
       }
+  
+      /* Style select arrow */
+      select {
+        appearance: none; // remove native arrow
+        background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'><path fill='%23ccc' d='M7 10l5 5 5-5z'/></svg>");
+        background-repeat: no-repeat;
+        background-position: right 8px center;
+        background-size: 12px 12px;
+        padding-right: 30px;
+  
+        &:hover {
+          border-color: #646cff;
+        }
+      }
     }
   }
+  
 
   /* Image Picker */
   .image-picker {
