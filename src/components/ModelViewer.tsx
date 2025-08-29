@@ -3,6 +3,7 @@
 //TODO prevent from exiting while processing
 //TODO glb model is dark
 //TODO .obj does not include materials
+//TODO clear output path before beginning
 
 import React, { Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
