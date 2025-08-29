@@ -1,11 +1,17 @@
+//TODO get the status from backend
+//TODO make button grey when loading and add loader
+//TODO prevent from exiting while processing
+//TODO glb model is dark
+//TODO .obj does not include materials
+
 import React, { Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Environment, useGLTF, useTexture } from "@react-three/drei";
 import * as THREE from "three";
 // @ts-ignore
-import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 // @ts-ignore
-import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader.js";
+import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
 
 interface ModelViewerProps {
   modelUrl: string | null;
@@ -26,7 +32,6 @@ const OBJModel: React.FC<{ url: string }> = ({ url }) => {
         const objName = url.split("/").pop()!;
         const mtlUrl = url.replace(".obj", ".mtl");
 
-        // Try loading .mtl if available
         try {
           const mtlLoader = new MTLLoader();
           mtlLoader.setResourcePath(basePath);
@@ -43,7 +48,6 @@ const OBJModel: React.FC<{ url: string }> = ({ url }) => {
           object.scale.set(1.2, 1.2, 1.2);
           setObj(object);
         } catch {
-          // If there's no MTL, load OBJ directly
           const objLoader = new OBJLoader();
           const object = await objLoader.loadAsync(url);
           object.scale.set(1.2, 1.2, 1.2);
@@ -71,7 +75,7 @@ const ModelViewer: React.FC<ModelViewerProps> = ({ modelUrl }) => {
 
   return (
     <div className="model-viewer" style={{ height: "400px", width: "100%" }}>
-      <Canvas camera={{ position: [0, 1.5, 3], fov: 50 }}>
+      <Canvas camera={{ position: [0, 5, 6.5], fov: 60 }}>
         <ambientLight intensity={0.5} />
         <directionalLight position={[2, 2, 2]} intensity={1} />
         <Suspense fallback={null}>

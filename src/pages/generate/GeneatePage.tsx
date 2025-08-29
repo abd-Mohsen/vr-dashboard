@@ -47,6 +47,7 @@ const GeneratePage: React.FC = () => {
   
       const data = await response.json();
       if (data.status !== "success") throw new Error(data.message);
+      console.log(data);
   
       setModelUrl(data.modelUrl); // URL to GLB or OBJ
     } catch (err) {
