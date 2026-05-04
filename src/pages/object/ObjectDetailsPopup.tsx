@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { ModelViewer } from './ModelViewer'
-import './ObjectDetailsPopup.scss'
+import './objectDetailsPopup.scss'
 
 export function ObjectDetailsPopup({ 
   object: model, 

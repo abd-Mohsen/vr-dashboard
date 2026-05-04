@@ -7,6 +7,7 @@ import Login from "./pages/login/Login";
 import "./styles/global.scss";
 import Layouts from "./pages/layout/Layouts";
 import GeneratePage from "./pages/generate/GeneatePage";
+import TestOBJ from "./pages/testOBJ";
 
 function App() {
   function Layout(){
@@ -47,6 +48,10 @@ function App() {
         {
           path: "/generate",
           element: <GeneratePage />,
+        },
+        {
+          path: "/test_obj",
+          element: <TestOBJ />,
         },
       ],
     },

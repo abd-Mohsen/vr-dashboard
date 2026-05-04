@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import "./ObjectCard.scss";
+import "./objectCard.scss";
 
 interface ObjectCardProps {
   object: {
